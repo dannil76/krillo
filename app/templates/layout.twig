@@ -1,0 +1,86 @@
+{# Layout #}
+<!DOCTYPE html>
+<!--[if lt IE 8]><html class="no-js lt-ie8 lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="sv-SE"><!--<![endif]-->
+	<head>
+		<title>{% block page_titel %}{% endblock %} - MAG Produkthantering</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<meta name="author" content="Dan Nilsson | Digital Media Direction" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<meta name="robots" content="index,follow" />
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Bitter:400,700" />
+		<link rel="stylesheet" href="{{ baseUrl() }}/css/MyFontsWebfontsKit.css" />
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="{{ baseUrl() }}/css/dest/style.min.css?v=20180513" />
+		<link rel="shortcut icon" href="{{ baseUrl() }}/favicon.ico" />
+		<link rel="apple-touch-icon" href="{{ baseUrl() }}/apple-touch-icon.png" />
+		<link rel="apple-touch-icon" sizes="76x76" href="{{ baseUrl() }}/apple-touch-icon-76x76.png" />
+		<link rel="apple-touch-icon" sizes="120x120" href="{{ baseUrl() }}/apple-touch-icon-120x120.png" />
+		<link rel="apple-touch-icon" sizes="152x152" href="{{ baseUrl() }}/apple-touch-icon-152x152.png" />
+		<!--[if lt IE 9]>
+		<script src="{{ baseUrl() }}/js/vendor/html5shiv.js"></script>
+		<script src="{{ baseUrl() }}/js/vendor/css3-mediaqueries.js"></script>
+		<![endif]-->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+	</head>
+	<body class="{{ navigation.current_url | trim('/') }}">
+		<!--[if lt IE 9]>
+			<p class="chromeframe veneer">Hej!<br />Sajten funkar utmärkt, men funkar sådär på gammalmodiga webbläsare.<br />Vi vill tipsa dig om att ladda hem en version av någon trevligare webbläsare.</a></p>
+		<![endif]-->
+		<div class="container" role="document">
+			{% block header %}{% endblock %}
+			<nav class="navbar navbar-default navbar-static-top" id="mainNavigation" role="navigation">
+				<div class="navbar-header">
+					<div class="mobile-logo">
+						<a href="{{ baseUrl() }}"><img src="{{ baseUrl() }}/img/logo.png" alt="Logo" /></a>
+					</div>
+					<button class="navbar-toggle" type="button">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="container navigation">
+					<div class="collapse navbar-collapse" id="navbarCollapse">
+						{% block navigation %}{% endblock %}
+					</div>
+				</div>
+			</nav>
+			<main>
+				{% block content %}{% endblock %}
+			</main>
+			<footer>
+				<div class="row">
+					<div class="col-sm-4">
+						<p>
+							Adress: Alnögatan 7,<br />
+							257 32 Rydebäck
+						</p>
+					</div>
+					<div class="col-sm-4 socials">
+						<div class="row">
+							<div class="col-sm-6">
+								<p>Hook up with us!</p>
+							</div>
+							<div class="col-sm-6">
+								<a href="#" target="_blank"><img src="{{ baseUrl() }}/img/facebook-logo.png" alt="Facebook" /></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4 hidden-xs">
+						<p>Webbproduktion: <a href="http://dannilsson.se" target="_blank">Dan Nilsson</a><br />
+						© 2018 Dan Nilsson | Digital Media Direction, All Rights Reserved</p>
+					</div>
+				</div>
+				<img class="img-responsive" src="{{ baseUrl() }}/img/logo-bottom.png" alt="Logo" />
+			</footer>
+		</div>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		{%- block js_include_end -%}{%- endblock -%}
+		<script src="{{ baseUrl() }}/js/all.js?rev=20180513"></script>
+		<script src="//localhost:35729/livereload.js"></script>
+	</body>
+</html>
