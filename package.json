@@ -1,0 +1,14 @@
+{
+	"name": "dannil76.magapi",
+	"version": "0.0.1",
+	"dependencies": {
+		"grunt": "*"
+	},
+	"devDependencies": {
+		"grunt-contrib-clean": "*",
+		"grunt-contrib-concat": "*",
+		"grunt-contrib-cssmin": "*",
+		"grunt-contrib-uglify": "*",
+		"grunt-contrib-watch": "*"
+	}
+}
