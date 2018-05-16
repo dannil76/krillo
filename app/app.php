@@ -3,13 +3,12 @@
 require_once APPLICATION_PATH . '/app/bootstrap.php';
 
 use GuzzleHttp\Command\Exception\CommandClientException;
-
-// use Gilbitron\Util\SimpleCache;
+use GuzzleHttp\Command\Exception\CommandServerException;
 
 $app->get('/(:sku)', function($sku = null) use ($app) {
 
 	$data = [];
-	$pageTitle = 'Skapa ny produkt';
+	$pageTitle = 'Skapa/Redigera produkt';
 
 	if($sku)
 	{
@@ -27,13 +26,19 @@ $app->get('/(:sku)', function($sku = null) use ($app) {
 		}
 		catch( CommandClientException $e )
 		{
+			$data['id'] = 0;
 			$data['sku'] = $sku;
+			$data['action'] = 'create';
 
-			$error = json_decode( $e->getResponse()->getBody(), true );
-			$errorMessage = null;
-			array_key_exists('message', $error) && $errorMessage = $error['message'] . '. Vill du skapa den?';
-
-			$app->flashNow('error', $errorMessage);
+			$response = json_decode( $e->getResponse()->getBody(), true );
+			$message = null;
+			array_key_exists('message', $response) && $message = $response['message'] . ' (sku). Vill du skapa den?';
+			$app->flashNow('notice', $message);
+		}
+		catch( CommandServerException $e )
+		{
+			$response = json_decode( $e->getResponse()->getBody(), true );
+			$app->flashNow('alert', $response['message']);
 		}
 	}
 
@@ -41,7 +46,6 @@ $app->get('/(:sku)', function($sku = null) use ($app) {
 		'page_title' => $pageTitle,
 		'product' => $data
 	));
-
 });
 
 
@@ -75,27 +79,47 @@ $app->post('/', function() use ($app) {
 		]
 	];
 
-	// dbug(json_encode( $data, JSON_PRETTY_PRINT ));
-
-	$error = null;
+	$response = null;
 
 	try
 	{
 		$result = $app->apiClient->CreateProduct( $data );
-		dbug($result);
 	}
 	catch( CommandClientException $e )
 	{
-		dbug($e->getMessage());
-		$error = json_decode( $e->getResponse()->getBody(), true );
-		// dbug($error);
+		$response = json_decode( $e->getResponse()->getBody(), true );
 	}
 
-	$error && $app->flash('error', $error);
-
-	$app->flash('notice', 'Produkt sparad');
+	if($response)
+	{
+		$app->flash('error', $response['message']);
+	}
+	else
+	{
+		$app->flash('notice', 'Produkt sparad');
+	}
 
 	$app->redirect('/' . $sku);
+});
+
+
+$app->delete('/', function() use ($app) {
+
+	$params = $app->request->post();
+	$sku = (string) $params['sku'];
+
+	$result = $app->apiClient->DeleteProduct( ['sku' => $sku] );
+	
+	if( (int) $result['status'] === 200 )
+	{
+		$app->flash('notice', 'Produkt med sku: ' . $sku . ' raderad!');
+	}
+	else
+	{
+		$app->flash('error', 'Något gick fel när produkten skulle tas bort. Prova gärna igen senare');
+	}
+
+	$app->redirect('/');
 });
 
 $app->run();
