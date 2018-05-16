@@ -11,35 +11,40 @@
 <p class="error">{{ flash.error }}</p>
 {% endif %}
 
+{% if flash.notice %}
+<p>{{ flash.notice }}</p>
+{% endif %}
+
 <form data-role="validator" data-interactive-check="true" method="post" action="/">
+	<hr>
+	<p>Alla fält är obligatoriska och måste fyllas i</p>
+	<p></p>
 	<div class="form-group">
 		<label for="sku">SKU</label>
-		<input type="text" id="sku" name="sku" data-role="input" data-validate="required minlength=3" value={{ product.sku }}>
+		<input type="text" id="sku" name="sku" data-role="input" data-validate="required minlength=3" value="{{ product.sku }}">
 		<span class="invalid_feedback">SKU måste var minst 3 tecken långt</span>
 	</div>
 	<div class="form-group">
-		<label for="name">Namn</label>
-		<input type="text" id="name" name="name" data-role="input" data-validate="required" value={{ product.name }}>
+		<label for="name">Namn (Länknamn)</label>
+		<input type="text" id="name" name="name" data-role="input" data-validate="required" value="{{ product.name }}">
 		<span class="invalid_feedback">Produktnamn saknas</span>
 	</div>
 	<div class="form-group">
 		<label for="price">Pris</label>
-		<input type="number" id="price" name="price" data-role="input" data-validate="required number" value={{ product.price }}>
+		<input type="number" id="price" name="price" data-role="input" data-validate="required number" value="{{ product.price }}">
 		<span class="invalid_feedback">Produktpris saknas</span>
 	</div>
 	<div class="form-group">
 		<button class="button success">Spara</button>
 
-		{% if product.sku %}
-		<button class="button alert">Radera produkt</button>
-		<input type="hidden" name="_METHOD" value="DELETE">
+		{% if product.sku and product.id != 0 %}
+		<button class="button alert" name="_METHOD" value="DELETE">Radera produkt</button>
 		{% endif %}
 
 	</div>
 </form>
 
-{% if flash.notice %}
-<p>{{ flash.notice }}</p>
+{% if flash.alert %}
+<p><code>{{ flash.alert }}</code></p>
 {% endif %}
-
 {% endblock %}
