@@ -21,7 +21,8 @@
 		"twig/twig": "~1.0",
 		"gilbitron/php-simplecache": "~1.4",
         "zendframework/zend-config": "*",
-        "guzzlehttp/guzzle-services": "^1.0@dev"
+        "gimler/guzzle-description-loader": "^0.0.4",
+        "guzzlehttp/guzzle-services": "^1.1"
 	},
 	"autoload": {
         "psr-0": {
