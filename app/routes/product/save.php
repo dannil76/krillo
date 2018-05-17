@@ -5,6 +5,7 @@
  */
 
 use GuzzleHttp\Command\Exception\CommandClientException;
+use GuzzleHttp\Command\Exception\CommandServerException;
 
 $app->post('/product/save', function() use ($app) {
 
@@ -51,6 +52,12 @@ $app->post('/product/save', function() use ($app) {
 		$app->flashNow( 'notice', $response['message'] );
 		$result = false;
 	}
+	catch( CommandServerException $e )
+	{
+		$response = json_decode( $e->getResponse()->getBody(), true );
+		$app->flashNow( 'alert', $response['message'] );
+		$result = false;
+	}
 
 	if($result instanceof GuzzleHttp\Command\Result)
 	{
@@ -58,7 +65,8 @@ $app->post('/product/save', function() use ($app) {
 	}
 	else
 	{
-		$app->flashNow( 'error', 'Något gick fel när produkten skulle tas bort. Prova gärna igen senare.' );
+		$app->flashNow( 'error', 'Något gick fel när produkten skulle sparas. En tekniker är på väg...' );
+		$pageTitle = 'Hoppsan...';
 	}
 
 	$app->render('response.twig', array(

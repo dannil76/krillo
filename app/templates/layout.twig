@@ -24,16 +24,16 @@
           <hr />
           <h2>{{ page_title }}</h2>
 
-          {% if flash.alert is defined %}
-          <p class="alert"><code>{{ flash.alert }}</code></p>
+          {% if flash.notice is defined %}
+          <p class="notice">{{ flash.notice }}</p>
           {% endif %}
 
           {% if flash.error is defined %}
           <p class="error">{{ flash.error }}</p>
           {% endif %}
 
-          {% if flash.notice is defined %}
-          <p class="notice">{{ flash.notice }}</p>
+          {% if flash.alert is defined %}
+          <p class="alert"><code>{{ flash.alert }}</code></p>
           {% endif %}
 
           {% block content %}{% endblock %}
