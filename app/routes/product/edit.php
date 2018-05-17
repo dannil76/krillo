@@ -27,8 +27,8 @@ $app->get('/product/edit/:productSku', function($productSku = null) use ($app) {
 		}
 		catch( CommandClientException $e )
 		{
-			$response = json_decode( $e->getResponse()->getBody() );
-			$app->flashNow( 'notice', $response->message );
+			$response = json_decode( $e->getResponse()->getBody(), true );
+			$app->flashNow( 'notice', $response['message'] );
 			$pageTitle = 'Hoppsan...';
 		}
 		catch( CommandServerException $e )

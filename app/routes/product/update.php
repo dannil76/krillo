@@ -31,13 +31,13 @@ $app->put('/product/update/:productSku', function($productSku) use ($app) {
 	}
 	catch( CommandClientException $e )
 	{
-		$response = json_decode( $e->getResponse()->getBody() );
-		$app->flashNow( 'notice', $response->message );
+		$response = json_decode( $e->getResponse()->getBody(), true );
+		$app->flashNow( 'notice', $response['message'] );
 	}
 	catch( CommandServerException $e )
 	{
-		$response = json_decode( $e->getResponse()->getBody() );
-		$app->flashNow( 'alert', $response->message );
+		$response = json_decode( $e->getResponse()->getBody(), true );
+		$app->flashNow( 'alert', $response['message'] );
 	}
 
 	if($result instanceof GuzzleHttp\Command\Result)

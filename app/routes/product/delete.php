@@ -16,8 +16,8 @@ $app->delete('/product/delete/:productSku', function($productSku) use ($app) {
 	}
 	catch( CommandClientException $e )
 	{
-		$response = json_decode( $e->getResponse()->getBody() );
-		$app->flashNow( 'notice', $response->message );
+		$response = json_decode( $e->getResponse()->getBody(), true );
+		$app->flashNow( 'notice', $response['message'] );
 	}
 
 	if( (int) $result['status'] === 200 )
