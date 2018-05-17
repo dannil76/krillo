@@ -19,9 +19,7 @@
 		"slim/views": "0.1.3",
 		"slim/middleware": "*",
 		"twig/twig": "~1.0",
-		"gilbitron/php-simplecache": "~1.4",
         "zendframework/zend-config": "*",
-        "gimler/guzzle-description-loader": "^0.0.4",
         "guzzlehttp/guzzle-services": "^1.1"
 	},
 	"autoload": {
