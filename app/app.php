@@ -1,125 +1,37 @@
 <?php
 
+// Prepare app
 require_once APPLICATION_PATH . '/app/bootstrap.php';
 
-use GuzzleHttp\Command\Exception\CommandClientException;
-use GuzzleHttp\Command\Exception\CommandServerException;
+use \Slim\Slim;
+use \Slim\Views\Twig;
+use \Slim\Views\TwigExtension;
+use \Slim\Middleware\SessionCookie;
+use \danNil76\Rest\Client as RestClient;
 
-$app->get('/(:sku)', function($sku = null) use ($app) {
+// Create app
+$app = new Slim( $config['slim'] );
+$app->view( new Twig() );
+$app->view()->parserOptions = $config['twig'];
+$app->view()->parserExtensions = array( new TwigExtension() );
+$app->add( new SessionCookie( array( 'secret' => '=?!front242' ) ) );
 
-	$data = [];
-	$pageTitle = 'Skapa/Redigera produkt';
-
-	if($sku)
-	{
-		try
-		{
-			$query = [
-				'sku' => $sku,
-				'fields' => 'id,sku,name,price'
-			];
-
-			$result = $app->apiClient->GetProduct($query);
-			$data = $result->toArray();
-
-			$data && $pageTitle = 'Redigera produkt';
-		}
-		catch( CommandClientException $e )
-		{
-			$data['id'] = 0;
-			$data['sku'] = $sku;
-			$data['action'] = 'create';
-
-			$response = json_decode( $e->getResponse()->getBody(), true );
-			$message = null;
-			array_key_exists('message', $response) && $message = $response['message'] . ' (sku). Vill du skapa den?';
-			$app->flashNow('notice', $message);
-		}
-		catch( CommandServerException $e )
-		{
-			$response = json_decode( $e->getResponse()->getBody(), true );
-			$app->flashNow('alert', $response['message']);
-		}
-	}
-
-	$app->render('products_form.twig', array(
-		'page_title' => $pageTitle,
-		'product' => $data
-	));
+// Setup api client
+$app->container->singleton('apiClient', function() use($config) {
+	return RestClient::create([
+		'service'	=> $config['api']['service'],
+		'base_uri'	=> $config['api']['base_url'],
+		'token'		=> $config['api']['token']
+	]);
 });
 
+// Define routes
+require_once APPLICATION_PATH . '/app/routes/home.php';
+require_once APPLICATION_PATH . '/app/routes/product/add.php';
+require_once APPLICATION_PATH . '/app/routes/product/edit.php';
+require_once APPLICATION_PATH . '/app/routes/product/save.php';
+require_once APPLICATION_PATH . '/app/routes/product/update.php';
+require_once APPLICATION_PATH . '/app/routes/product/delete.php';
 
-$app->post('/', function() use ($app) {
-
-	$params = $app->request->post();
-
-	$sku 	= $params['sku'];
-	$name 	= $params['name'];
-	$price 	= (int) $params['price'];
-
-	$data = [
-		'product' => [
-			'sku' => $sku,
-			'name' => $name,
-			'attribute_set_id' => 4,
-			'price'	=> $price,
-			'type_id' => 'simple',
-			'extension_attributes' => [
-				'category_links' => [
-					[
-						'position' => 1,
-						'category_id' => "3"
-					]
-				],
-				'stock_item' => [
-					'qty' => "10",
-					'is_in_stock' => true
-				]
-			]
-		]
-	];
-
-	$response = null;
-
-	try
-	{
-		$result = $app->apiClient->CreateProduct( $data );
-	}
-	catch( CommandClientException $e )
-	{
-		$response = json_decode( $e->getResponse()->getBody(), true );
-	}
-
-	if($response)
-	{
-		$app->flash('error', $response['message']);
-	}
-	else
-	{
-		$app->flash('notice', 'Produkt sparad');
-	}
-
-	$app->redirect('/' . $sku);
-});
-
-
-$app->delete('/', function() use ($app) {
-
-	$params = $app->request->post();
-	$sku = (string) $params['sku'];
-
-	$result = $app->apiClient->DeleteProduct( ['sku' => $sku] );
-	
-	if( (int) $result['status'] === 200 )
-	{
-		$app->flash('notice', 'Produkt med sku: ' . $sku . ' raderad!');
-	}
-	else
-	{
-		$app->flash('error', 'Något gick fel när produkten skulle tas bort. Prova gärna igen senare');
-	}
-
-	$app->redirect('/');
-});
-
+// Kick but!
 $app->run();
