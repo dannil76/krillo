@@ -1,0 +1,61 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+{% if flash.notice is not defined %}
+<form data-role="validator" data-interactive-check="true"
+	method="post"
+	action="{%- if todo == 'edit' -%}
+		{{- urlFor('product.update', {'productSku': product.sku}) -}}
+	{%- elseif todo == 'add' -%}
+		{{- urlFor('product.save') -}}
+	{%- endif -%}">
+	<hr>
+	<p>Alla fält är obligatoriska.</p>
+	<p></p>
+	<div class="form-group">
+		{% if todo == 'add' %}
+		<label for="sku">
+			SKU <span style="font-size:0.8rem;">
+				<em>(Om SKU redan finns uppdateras produkten istället för att läggas till)</em>
+			</span>
+		</label>
+		<input type="text" id="sku" name="sku"
+			data-role="input"
+			data-validate="required minlength=3"
+			value="{{ product.sku }}">
+		<span class="invalid_feedback">SKU måste var minst 3 tecken långt!</span>
+		{% endif %}
+	</div>
+	<div class="form-group">
+		<label for="name">
+			Namn <span style="font-size:0.8rem;"><em>(Länknamn)</em></span>
+		</label>
+		<input type="text" id="name" name="name"
+			data-role="input"
+			data-validate="required"
+			value="{{ product.name }}">
+		<span class="invalid_feedback">Produktnamn saknas!</span>
+	</div>
+	<div class="form-group">
+		<label for="price">Pris <span style="font-size:0.8rem;"><em>(SEK)</em></span></label>
+		<input type="number" id="price" name="price"
+			data-role="input"
+			data-validate="required number"
+			value="{{ product.price }}">
+		<span class="invalid_feedback">Produktpris saknas!</span>
+	</div>
+	<div class="form-group">
+		<button class="button success">Spara</button>
+		<a class="button cancel" href="{{ urlFor('home') }}">Avbryt</a>
+	</div>
+	<input type="hidden" name="todo" value="{{ todo }}">
+	{% if todo == 'edit' %}
+	<input type="hidden" name="_METHOD" value="PUT">
+	{% endif %}
+</form>
+{% else %}
+<p><a href="{{ urlFor('home') }}">Tillbaka till start</a></p>
+{% endif %}
+
+{% endblock %}

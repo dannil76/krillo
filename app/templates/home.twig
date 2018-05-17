@@ -1,0 +1,45 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<div class="button-container">
+	<a class="button secondary rounded" href="{{ urlFor('product.add') }}">Lägg till produkt</a>
+</div>
+
+<table class="table striped">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>SKU</th>
+			<th>Namn</th>
+			<th>Pris (SEK)</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody class="row-hover">
+		{% for product in products %}
+		<tr>
+			<td>{{ product.id }}</td>
+			<td><a href="{{ urlFor('product.edit', {'productSku': product.sku}) }}">{{ product.sku }}</a></td>
+			<td>{{ product.name }}</td>
+			<td>{{ product.price }} </td>
+			<td>
+				<form action="{{ urlFor('product.delete', {'productSku': product.sku}) }}" method="post">
+					<button class="button alert rounded" type="submit">
+						<span class="mif-bin"></span>
+					</button>
+					<input type="hidden" name="_METHOD" value="DELETE" />
+				</form>
+			</td>
+		</tr>
+		{% else %}
+		<tr>
+			<td colspan="4">
+				Här var det tomt..
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
