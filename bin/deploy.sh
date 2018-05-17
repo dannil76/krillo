@@ -17,8 +17,9 @@ RSYNC_OPTIONS=(
 	--exclude='package.json'
 	--exclude='package-lock.json'
 	--exclude='deploy.sh'
-	--exclude='composer.json'
+	# --exclude='composer.json'
 	--exclude='composer.lock'
+	--exclude='vendor'
 	--exclude='app/cache/*'
 	--exclude='app/config/development.php'
 	--exclude='app/config/test.php'
@@ -26,6 +27,8 @@ RSYNC_OPTIONS=(
 	--exclude='public/js/src'
 	--exclude='public/js/vendor'
 	# --exclude='public/css/*.css'
+	--exclude='logs/*'
+	--exclude='misc'
 	--exclude='test'
 	--exclude='tests'
 	--exclude='Test'
@@ -43,22 +46,29 @@ rsync \
 	--compress \
 	--human-readable \
 	--verbose \
-	--delete-after \
-	-e ssh ${RSYNC_OPTIONS[@]} . ${SERVER}:/srv/${DEST_DIR}/public_html
+	--delete-delay \
+	-e ssh ${RSYNC_OPTIONS[@]} ../ ${SERVER}:/srv/${DEST_DIR}/public_html
 
 ssh "$SERVER" "
 set -ue
 
-cd /srv/$DEST_DIR/public_html/app/cache
-rm -rf *
+cd /srv/$DEST_DIR/public_html
 
-cd /srv/$DEST_DIR/public_html/bin
+sudo rm -rf app/cache/*
+chmod 777 app/cache
+
+cd bin
 ./get_token.sh > ../app/config/api/token
-
 chmod 700 get_token.sh
 
 cd ../public
 mv htaccess_prod.txt .htaccess
+
+cd ../app
+composer clearcache
+composer install
+
+sudo service apache2 reload
 "
 echo "$SERVER : ended"
 exit 0
