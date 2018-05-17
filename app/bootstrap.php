@@ -20,5 +20,7 @@ $config = \Zend\Config\Factory::fromFiles(
 	glob( $configPaths, GLOB_BRACE | GLOB_NOSORT )
 );
 
-// API TOKEN
-if( !$config['api']['token'] ) $config['api']['token'] = getToken();
+if( is_file($config['api']['token']) )
+{
+	$config['api']['token'] = file_get_contents( $config['api']['token'] );
+}
