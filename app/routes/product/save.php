@@ -65,7 +65,7 @@ $app->post('/product/save', function() use ($app) {
 	}
 	else
 	{
-		$app->flashNow( 'error', 'Något gick fel när produkten skulle sparas. En tekniker är på väg...' );
+		$app->flashNow( 'error', 'Något gick fel när produkten skulle sparas.' );
 		$pageTitle = 'Hoppsan...';
 	}
 
