@@ -24,8 +24,7 @@ class Client extends GGuzzClient
 
 		$client = new GClient([
 			'headers' => [
-				'Authorization'		=> 'Bearer ' . $config['token'],
-				'Accept'			=> 'application/json'
+				'Authorization'		=> 'Bearer ' . $config['token']
 			]
 		]);
 
