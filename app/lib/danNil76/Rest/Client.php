@@ -19,14 +19,14 @@ class Client extends GGuzzClient
 		$serviceJson = json_decode( file_get_contents( $config['service'] ), true );
 
 		$serviceDesc = new GDescription(
-			$serviceJson
+			['baseUrl' => $config['base_uri']] + (array) $serviceJson
 		);
 
 		$client = new GClient([
 			'headers' => [
 				'Authorization'		=> 'Bearer ' . $config['token'],
 				'Content-Type' 		=> 'application/json',
-				'Accept'			=> 'application/json'
+				'Accept'			=> '*/*'
 			]
 		]);
 
