@@ -30,6 +30,6 @@ class Client extends GGuzzClient
 			]
 		]);
 
-		return new static( $client, $serviceDesc);
+		return new static( $client, $serviceDesc, NULL, NULL, NULL, $config );
 	}
 }
