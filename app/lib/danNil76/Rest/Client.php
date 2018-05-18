@@ -22,13 +22,13 @@ class Client extends GGuzzClient
 			['baseUrl' => $config['base_uri']] + (array) $serviceJson
 		);
 
-		$client = new GClient([
-			'headers' => [
+		$client = new GClient(array(
+			'headers' => array(
 				'Authorization'		=> 'Bearer ' . $config['token'],
-				'Content-type' 		=> 'application/json',
-				'Accept'			=> 'application/json'
-			]
-		]);
+				'Content-Type' 		=> "application/json",
+				'Accept'			=> "application/json"
+			)
+		));
 
 		return new static( $client, $serviceDesc, NULL, NULL, NULL, $config );
 	}
