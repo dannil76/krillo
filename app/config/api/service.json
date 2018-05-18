@@ -1,13 +1,13 @@
 {
 	"name": "MAG",
 	"apiVersion": "2018-05-11",
-	"baseUrl": "//krillo22.caupo.se",
+	"baseUrl": "http://krillo22.caupo.se/rest/V1/",
 	"description": "Create, update and delete products using the MAG api.",
 	"operations": {
 		"GetProducts": {
 			"summary": "Get all products",
 			"httpMethod": "GET",
-			"uri": "/rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=sku&searchCriteria[filter_groups][0][filters][0][value]=%&searchCriteria[filter_groups][0][filters][0][condition_type]=like&fields=items[id,sku,name,price]",
+			"uri": "products/?searchCriteria[filter_groups][0][filters][0][field]=sku&searchCriteria[filter_groups][0][filters][0][value]=%&searchCriteria[filter_groups][0][filters][0][condition_type]=like&fields=items[id,sku,name,price]",
 			"responseModel": "ResponseResource"
 		},
 		"GetProduct": {
