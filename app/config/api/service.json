@@ -7,9 +7,16 @@
 		"GetProducts": {
 			"summary": "Get all products",
 			"httpMethod": "GET",
-			"uri": "/rest/default/V1/products/?searchCriteria",
+			"uri": "/rest/default/V1/products/{searchCriteria}",
 			"responseModel": "ResponseResource",
-			"location": "uri"
+			"parameters": {
+				"searchCriteria": {
+					"type": "string",
+					"location": "query",
+					"default": "*",
+					"required": true
+				}
+			}
 		},
 		"GetProduct": {
 			"summary": "Get product",
