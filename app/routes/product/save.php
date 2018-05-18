@@ -49,7 +49,7 @@ $app->post('/product/save', function() use ($app) {
 	catch( CommandClientException $e )
 	{
 		$response = json_decode( $e->getResponse()->getBody(), true );
-		$app->flashNow( 'notice', $response['message'] );
+		$app->flashNow( 'error', $response['message'] );
 		$result = false;
 	}
 	catch( CommandServerException $e )
@@ -65,7 +65,7 @@ $app->post('/product/save', function() use ($app) {
 	}
 	else
 	{
-		$app->flashNow( 'error', 'Något gick fel när produkten skulle sparas.' );
+		$app->flashNow( 'notice', 'Något gick fel när produkten skulle sparas.' );
 		$pageTitle = 'Hoppsan...';
 	}
 
