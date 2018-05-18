@@ -24,10 +24,12 @@ class Client extends GGuzzClient
 
 		$client = new GClient([
 			'headers' => [
-				'Authorization'		=> 'Bearer ' . $config['token']
+				'Authorization'		=> 'Bearer ' . $config['token'],
+				'Content-Type' 		=> 'application/json',
+				'Accept'			=> 'application/json'
 			]
 		]);
 
-		return new static( $client, $serviceDesc, NULL, NULL, NULL, $config );
+		return new static( $client, $serviceDesc);
 	}
 }
