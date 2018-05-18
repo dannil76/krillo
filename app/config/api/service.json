@@ -7,7 +7,7 @@
 		"GetProducts": {
 			"summary": "Get all products",
 			"httpMethod": "GET",
-			"uri": "/rest/V1/products/?searchCriteria",
+			"uri": "/rest/all/V1/products/?searchCriteria",
 			"responseModel": "ResponseResource"
 		},
 		"GetProduct": {
