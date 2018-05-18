@@ -1,0 +1,90 @@
+{
+	"name": "MAG",
+	"apiVersion": "2018-05-11",
+	"baseUrl": "http://krillo22.caupo.se",
+	"description": "Create, update and delete products using the MAG api.",
+	"operations": {
+		"GetProducts": {
+			"summary": "Get all products",
+			"httpMethod": "GET",
+			"uri": "/rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=sku&searchCriteria[filter_groups][0][filters][0][value]=%&searchCriteria[filter_groups][0][filters][0][condition_type]=like&fields=items[id,sku,name,price]",
+			"responseModel": "ResponseResource"
+		},
+		"GetProduct": {
+			"summary": "Get product",
+			"httpMethod": "GET",
+			"uri": "/rest/default/V1/products/{sku}{?fields}",
+			"responseModel": "ResponseResource",
+			"parameters": {
+				"sku": {
+					"type": "string",
+					"location": "uri",
+					"required": true
+				},
+				"fields": {
+					"type": "string",
+					"location": "query"
+				}
+			}
+		},
+		"CreateProduct": {
+			"summary": "Create product",
+			"httpMethod": "POST",
+			"uri": "/rest/default/V1/products",
+			"responseModel": "ResponseResource",
+			"parameters": {
+				"product": {
+					"type": "array",
+					"location": "json"
+				}
+			}
+		},
+		"UpdateProduct": {
+			"summary": "Update product by sku",
+			"httpMethod": "PUT",
+			"uri": "/rest/default/V1/products/{sku}",
+			"responseModel": "ResponseResource",
+			"parameters": {
+				"sku": {
+					"type": "string",
+					"location": "uri",
+					"required": true
+				},
+				"product": {
+					"type": "array",
+					"location": "json"
+				}
+			}
+		},
+		"DeleteProduct": {
+			"summary": "Delete product by sku",
+			"httpMethod": "DELETE",
+			"uri": "/rest/default/V1/products/{sku}",
+			"responseModel": "DeleteResponseResource",
+			"parameters": {
+				"sku": {
+					"type": "string",
+					"location": "uri",
+					"required": true
+				}
+			}
+		}
+	},
+	"models": {
+		"ResponseResource": {
+			"type": "object",
+			"additionalProperties": {
+				"location": "json"
+			}
+		},
+		"DeleteResponseResource": {
+			"type": "object",
+			"properties": {
+				"status": {
+					"location": "statusCode",
+					"type": "integer"
+				}
+			}
+		}
+	}
+}
